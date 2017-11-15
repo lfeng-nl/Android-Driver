@@ -1,6 +1,6 @@
 # Android Driver
 ## 1.Android C/C++ 层Log打印
-- Android log 打印等级： Verbose,Debug,Info,Warn,Error。
+- Android log 打印等级： Verbose，Debug，Info，Warn，Error。
 - Info、Warn、Error等级的Log禁止作为普通的调试信息使用
 - 需包含头文件`#include <cutils/log.h>`；
 - 按打印等级分：ALOGV,ALOGD,ALOGI,ALOGW,ALOGE;
@@ -55,7 +55,7 @@ int console_printk[4] = {
 ## 3.dev_dbg
 - dev_dbg：内核中我们常用`dev_dbg`来控制输出，这个函数实质是调用 `printk(KERN_DEBUG)`来打印输出； 
 - 打开方式：包含头文件`<linux/device.h>`或 `<linux/platform_device.h>`,在包含该头文件之前，使用`#define DEBUG 1`来打开开关；
-- dev_dbg参数:第一个为`struct device *dev`类型，第二个为需要打印的信息；
+- dev_dbg参数:第一个为`struct device *dev`类型,可以利用`dev->name`来检索log信息，第二个为需要打印的信息；
 ```c
 #define dev_info(dev, fmt, arg...) _dev_info(dev, fmt, ##arg)
 

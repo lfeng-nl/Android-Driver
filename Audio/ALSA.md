@@ -118,7 +118,28 @@ struct snd_kcontrol_new {
 	- Machine:具体的某个机器、开发板、手机
 	- Platform:一般指某个Soc平台，
 	- Codec:指机器上的编解码器。
-
+- Machine：关键结构体`snd_soc_card`，`snd_soc_dai_link`，`snd_soc_ops`，驱动在`sound/soc/soc-core.c`中;
+	```c
+	platform_device "soc-audio"  |   platform_driver  "soc-audio"
+		^                        |
+		|                        |
+	snd_soc_card                 |
+		^                        |
+		|                        |
+	sdn_soc_dai_link             |
+		^                        |
+		|                        |
+	snd_soc_ops                  |
+	```
+	- `soc_probe() --> snd_soc_register_card() --> snd_soc_instantiate_card()`
+	- 关键的几个链表：
+	```c
+	static DEFINE_MUTEX(client_mutex);   //保护链表的锁
+	static LIST_HEAD(dai_list);          //snd_soc_dai 的链表 
+	static LIST_HEAD(platform_list);     //snd_soc_platform 的链表
+	static LIST_HEAD(codec_list);        //snd_soc_codec 的链表
+	static LIST_HEAD(component_list);    //snd_soc_component 的链表
+	``` 
 
 
 # III TinyALSA
