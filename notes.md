@@ -1,9 +1,12 @@
 # Android Driver
 ## 1.Android C/C++ 层Log打印
 - Android log 打印等级： Verbose，Debug，Info，Warn，Error。
-- Info、Warn、Error等级的Log禁止作为普通的调试信息使用
-- 需包含头文件`#include <cutils/log.h>`；
 - 按打印等级分：ALOGV,ALOGD,ALOGI,ALOGW,ALOGE;
+- Info、Warn、Error等级的Log禁止作为普通的调试信息使用
+- 使用方式
+	- 包含头文件`#include <cutils/log.h>`；
+	- 定义LOG_TAG宏：`#define LOG_TAG "audio_hw_primary"`
+	- 在Android.mk中增加 `LOCAL_SHARED_LIBRARIES += libcutils `,动态库依赖
 - 各等级log打印控制：
 ```c
 #define LOG_NDEBUG 0		//打开ALOGV
@@ -54,7 +57,7 @@ int console_printk[4] = {
 - dmesg:好像不受以上级别控制，都会打印；
 ## 3.dev_dbg
 - dev_dbg：内核中我们常用`dev_dbg`来控制输出，这个函数实质是调用 `printk(KERN_DEBUG)`来打印输出； 
-- 打开方式：包含头文件`<linux/device.h>`或 `<linux/platform_device.h>`,在包含该头文件之前，使用`#define DEBUG 1`来打开开关；
+- 使用方式：1.包含头文件`<linux/device.h>`或 `<linux/platform_device.h>`, 2.在包含该头文件之前，使用`#define DEBUG 1`来打开开关；
 - dev_dbg参数:第一个为`struct device *dev`类型,可以利用`dev->name`来检索log信息，第二个为需要打印的信息；
 ```c
 #define dev_info(dev, fmt, arg...) _dev_info(dev, fmt, ##arg)
@@ -64,7 +67,9 @@ int console_printk[4] = {
 do {						     \
 	dynamic_dev_dbg(dev, format, ##__VA_ARGS__); \
 } while (0)
+
 #elif defined(DEBUG)
+
 #define dev_dbg(dev, format, arg...)		\
 	dev_printk(KERN_DEBUG, dev, format, ##arg)
 #else
@@ -74,5 +79,16 @@ do {						     \
 		dev_printk(KERN_DEBUG, dev, format, ##arg);	\
 	0;							\
 })
+
 #endif
+```
+## 4.跟打印log相关的预定义宏和预定义标识符
+```c
+/* 预定义宏 */
+__DATE__    //运行预处理的时间
+__FILE__    //当前源文件的名字
+__LINE__    //当前源文件代码中的行号的整数常量
+__TIME__    //源文件的编译时间，格式为"hh: mm: ss"
+/* 预定义标识符 */
+__func__    //代表为 "函数名" 的字符串
 ```
