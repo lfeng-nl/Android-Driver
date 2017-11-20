@@ -6,10 +6,10 @@
 - 按打印等级分：ALOGV,ALOGD,ALOGI,ALOGW,ALOGE;
 - 各等级log打印控制：
 ```c
-#define LOG_NDEBUG 0		//打开ALOGV:  
-#define LOG_NIDEBUG 0		//打开ALOGI：  
-#define LOG_NDDEBUG 0 		//打开ALOGD： 
-#define NDEBUG 0		//打开全部LOG：
+#define LOG_NDEBUG 0		//打开ALOGV
+#define LOG_NDDEBUG 0 		//打开ALOGD
+#define LOG_NIDEBUG 0		//打开ALOGI
+#define NDEBUG 0		//打开全部LOG
 ```
 
 ## 2.printk 打印控制
