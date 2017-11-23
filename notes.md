@@ -4,15 +4,15 @@
 - 按打印等级分：ALOGV,ALOGD,ALOGI,ALOGW,ALOGE;
 - Info、Warn、Error等级的Log禁止作为普通的调试信息使用
 - 使用方式
-	- 包含头文件`#include <cutils/log.h>`；
-	- 定义LOG_TAG宏：`#define LOG_TAG "audio_hw_primary"`
-	- 在Android.mk中增加 `LOCAL_SHARED_LIBRARIES += libcutils `,动态库依赖
+  - 包含头文件`#include <cutils/log.h>`；
+  - 定义LOG_TAG宏：`#define LOG_TAG "audio_hw_primary"`
+  - 在Android.mk中增加 `LOCAL_SHARED_LIBRARIES += libcutils `,动态库依赖
 - 各等级log打印控制：
 ```c
 #define LOG_NDEBUG 0		//打开ALOGV
 #define LOG_NDDEBUG 0 		//打开ALOGD
 #define LOG_NIDEBUG 0		//打开ALOGI
-#define NDEBUG 0		//打开全部LOG
+#define NDEBUG 0		    //打开全部LOG
 ```
 
 ## 2.printk 打印控制
@@ -31,12 +31,12 @@
 
 ```
 - 内核对打印级别的控制：`cat /proc/sys/kernel/printk/` 可以查看，默认值受一般为：
-	> 7 4 1 7  
-	> 依次为：  
-	> 7：控制台日志级别，优先级高于该级别的（不包括），被打印至控制台，例如串口；  
-	> 4：默认消息级别，没有指定消息级别的消息，会被赋予此权限；  
-	> 1：控制台级别可被设置的最小值；  
-	> 7：控制台级别的缺省值；
+  > 7 4 1 7  
+  > 依次为：  
+  > 7：控制台日志级别，优先级高于该级别的（不包括），被打印至控制台，例如串口；  
+  > 4：默认消息级别，没有指定消息级别的消息，会被赋予此权限；  
+  > 1：控制台级别可被设置的最小值；  
+  > 7：控制台级别的缺省值；
 - 以上值由`kernel/printk.c`中：
 ```c
 /* printk's without a loglevel use this.. */

@@ -1,30 +1,32 @@
-模块类型
+Android.mk是Android提供的一种makefile文件，用来指定诸如编译生成so库名、引用的头文件目录、需要编译的.c/.cpp文件和.a静态库
 
-apk程序
+##1.模块类型
 
-Android程序，编译打包生成apk文件
-生成路径 out/target/product/{product-name}/obj/APPS/XXX_intermediates
-java库
+### apk程序
+- Android程序，编译打包生成apk文件
+- 生成路径 out/target/product/{product-name}/obj/APPS/XXX_intermediates
 
-java库，编译打包生成jar文件
-生成路径 out/target/product/{product-name}/obj/JAVA_LIBRARIES/XXX_intermediates
-c\c++应用程序
+### java库
+- java库，编译打包生成jar文件
+- 生成路径 out/target/product/{product-name}/obj/JAVA_LIBRARIES/XXX_intermediates
 
-可执行的c\c++应用程序
-生成路径 out/target/product/{product-name}/obj/EXECUTABLE/XXX_intermediates
-c\c++静态库
+### c\c++应用程序
+- 可执行的c\c++应用程序
+- 生成路径 out/target/product/{product-name}/obj/EXECUTABLE/XXX_intermediates
 
-编译生成c\c++静态库，并打包成.a文件
-生成路径 out/target/product/{product-name}/obj/STATIC_LIBRARY/XXX_static_intermediates
-c\c++共享库
+### c\c++静态库
+- 编译生成c\c++静态库，并打包成.a文件
+- 生成路径 out/target/product/{product-name}/obj/STATIC_LIBRARY/XXX_static_intermediates
 
-编译生成共享库（动态链接库），并打包成.so文件，会被整合到apk包中。
-生成路径 out/target/product/{product-name}/obj/obj/SHARED_LIBRARY/XXX_shared_intermediates
-编写Android.mk
+### c\c++共享库
+- 编译生成共享库（动态链接库），并打包成.so文件，会被整合到apk包中。
+- 生成路径 out/target/product/{product-name}/obj/obj/SHARED_LIBRARY/XXX_shared_intermediates
+## 2. 编写Android.mk
 
-概述
+## 概述
 
 Setting.apk的Android.mk内容
+```make
 LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 # 一个Android.mk以这两行开始，其作用是
@@ -45,29 +47,34 @@ include $(BUILD_PACKAGE)
 
 # Use the folloing include to make our test apk.
 include $(call all-makefiles-under,$(LOCAL_PATH))
+```
 编译环境变量
 
-变量名	作用
-LOCAL_MODULE	当前模块的名称，这个名称应当是唯一的，模块间的依赖关系就是通过这个名称来引用的
-LOCAL_MODULE_CLASS	模块所属类型，根据该类型将生成的模块放到指定的目录下，<br> 如：EXECUTABLES 放到system/bin目录下
-LOCAL_PACKAGE_NAME	当前apk应用的名称
-LOCAL_SRC_FILES	当前模块包含的所有源代码文件
-LOCAL_JAVA_LIBRARIES	当前模块依赖的 Java 共享库
-LOCAL_STATIC_JAVA_LIBRARIES	当前模块依赖的 Java 静态库
-LOCAL_C_INCLUDES	C 或 C++ 语言需要的头文件的路径
-LOCAL_STATIC_LIBRARIES	当前模块在静态链接时需要的库的名称
-LOCAL_SHARED_LIBRARIE	当前模块在运行时依赖的动态库的名称
-LOCAL_CFLAGS	提供给 C/C++ 编译器的额外编译参数
-LOCAL_CERTIFICATE	签署当前应用的证书名称。
-LOCAL_MODULE_TAG	当前模块所包含的标签，一个模块可以包含多个标签。标签的值可能是 debug, eng,user, development或optional。其中，optional 是默认标签。
-标签是提供给编译类型使用的。不同的编译类型会安装包含不同标签的模块
-编译类型的说明
-名称	说明
-eng	默认类型，该编译类型适用于开发阶段。<br>当选择这种类型时，编译结果将：<br>安装包含 eng, debug, user，development 标签的模块<br>安装所有没有标签的非 APK 模块<br>安装所有产品定义文件中指定的 APK 模块
-user	该编译类型适合用于最终发布阶段。<br>当选择这种类型时，编译结果将：<br>安装所有带有 user 标签的模块 <br> 安装所有没有标签的非 APK 模块 <br> 安装所有产品定义文件中指定的 APK 模块，APK 模块的标签将被忽略
-userdebug	该编译类型适合用于 debug 阶段。<br>该类型和 user 一样，除了：<br>会安装包含 debug 标签的模块 <br>编译出的系统具有 root 访问权限
-编译系统中提供的函数
+| 变量                          | 作用                                       |
+| :-------------------------- | :--------------------------------------- |
+| LOCAL_MODULE                | 当前模块的名称，这个名称应当是唯一的，模块间的依赖关系就是通过这个名称来引用的  |
+| LOCAL_MODULE_CLASS          | 模块所属类型，根据该类型将生成的模块放到指定的目录下，<br> 如：EXECUTABLES 放到system/bin目录下 |
+| LOCAL_PACKAGE_NAME          | 当前apk应用的名称                               |
+| LOCAL_SRC_FILES             | 当前模块包含的所有源代码文件                           |
+| LOCAL_JAVA_LIBRARIES        | 当前模块依赖的 Java 共享库                         |
+| LOCAL_STATIC_JAVA_LIBRARIES | 当前模块依赖的 Java 静态库                         |
+| LOCAL_C_INCLUDES            | C 或 C++ 语言需要的头文件的路径                      |
+| LOCAL_STATIC_LIBRARIES      | 当前模块在静态链接时需要的库的名称                        |
+| LOCAL_SHARED_LIBRARIE       | 当前模块在运行时依赖的动态库的名称                        |
+| LOCAL_CFLAGS                | 提供给 C/C++ 编译器的额外编译参数                     |
+| LOCAL_CERTIFICATE           | 签署当前应用的证书名称。                             |
+| LOCAL_MODULE_TAG            | 当前模块所包含的标签，一个模块可以包含多个标签。标签的值可能是 debug, eng,user, development或optional。其中，optional 是默认标签。 |
+> 标签是提供给编译类型使用的。不同的编译类型会安装包含不同标签的模块
 
+编译类型的说明
+
+| 名称        | 说明                                       |
+| --------- | ---------------------------------------- |
+| eng       | 默认类型，该编译类型适用于开发阶段。<br>当选择这种类型时，编译结果将：<br>安装包含 eng, debug, user，development 标签的模块<br>安装所有没有标签的非 APK 模块<br>安装所有产品定义文件中指定的 APK 模块 |
+| user      | 该编译类型适合用于最终发布阶段。<br>当选择这种类型时，编译结果将：<br>安装所有带有 user 标签的模块 <br> 安装所有没有标签的非 APK 模块 <br> 安装所有产品定义文件中指定的 APK 模块，APK 模块的标签将被忽略 |
+| userdebug | 该编译类型适合用于 debug 阶段。<br>该类型和 user 一样，除了：<br>会安装包含 debug 标签的模块 <br>编译出的系统具有 root 访问权限 |
+编译系统中提供的函数
+```makefile
 # 获取当前文件夹路径
 $(call my-dir)
 # 获取指定目录下的所有 Java 文件
@@ -80,8 +87,9 @@ $(call all-Iaidl-files-under, <src>)
 $(call all-makefiles-under, <folder>)
 # 获取 Build 输出的目标文件夹路径
 $(call intermediates-dir-for, <class>, <app_name>, <host or target>, <common?> )
+```
 编译方式常量
-
+```makefile
 在/build/core/config.mk中定义一些常量，每个常量对应一种编译方式的Makefile文件
 BUILD_HOST_STATIC_LIBRARY:= $(BUILD_SYSTEM)/host_static_library.mk
 BUILD_HOST_SHARED_LIBRARY:= $(BUILD_SYSTEM)/host_shared_library.mk
@@ -97,25 +105,28 @@ BUILD_MULTI_PREBUILT:= $(BUILD_SYSTEM)/multi_prebuilt.mk
 BUILD_JAVA_LIBRARY:= $(BUILD_SYSTEM)/java_library.mk
 BUILD_STATIC_JAVA_LIBRARY:= $(BUILD_SYSTEM)/static_java_library.mk
 BUILD_HOST_JAVA_LIBRARY:= $(BUILD_SYSTEM)/host_java_library.mk
+```
 各种模块的编译方式的定义文件
-文件名	说明
-host_static_library.mk	定义了如何编译主机上的静态库。
-host_shared_library.mk	定义了如何编译主机上的共享库。
-static_library.mk	定义了如何编译设备上的静态库。
-shared_library.mk	定义了如何编译设备上的共享库。
-executable.mk	定义了如何编译设备上的可执行文件。
-host_executable.mk	定义了如何编译主机上的可执行文件。
-package.mk	定义了如何编译 APK 文件。
-prebuilt.mk	定义了如何处理一个已经编译好的文件 ( 例如 Jar 包 )。
-multi_prebuilt.mk	定义了如何处理一个或多个已编译文件，该文件的实现依赖 prebuilt.mk。
-host_prebuilt.mk	处理一个或多个主机上使用的已编译文件，该文件的实现依赖 multi_prebuilt.mk。
-java_library.mk	定义了如何编译设备上的共享 Java 库。
-static_java_library.mk	定义了如何编译设备上的静态 Java 库。
-host_java_library.mk	定义了如何编译主机上的共享 Java 库。
+
+| 文件名                    | 说明                                       |
+| ---------------------- | ---------------------------------------- |
+| host_static_library.mk | 定义了如何编译主机上的静态库。                          |
+| host_shared_library.mk | 定义了如何编译主机上的共享库。                          |
+| static_library.mk      | 定义了如何编译设备上的静态库。                          |
+| shared_library.mk      | 定义了如何编译设备上的共享库。                          |
+| executable.mk          | 定义了如何编译设备上的可执行文件。                        |
+| host_executable.mk     | 定义了如何编译主机上的可执行文件。                        |
+| package.mk             | 定义了如何编译 APK 文件。                          |
+| prebuilt.mk            | 定义了如何处理一个已经编译好的文件 ( 例如 Jar 包 )。          |
+| multi_prebuilt.mk      | 定义了如何处理一个或多个已编译文件，该文件的实现依赖 prebuilt.mk。  |
+| host_prebuilt.mk       | 处理一个或多个主机上使用的已编译文件，该文件的实现依赖 multi_prebuilt.mk。 |
+| java_library.mk        | 定义了如何编译设备上的共享 Java 库。                    |
+| static_java_library.mk | 定义了如何编译设备上的静态 Java 库。                    |
+| host_java_library.mk   | 定义了如何编译主机上的共享 Java 库。                    |
 示例
 
 编译一个 APK 文件
-
+```makefile
 LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 # 获取所有子目录中的 Java 文件
@@ -138,10 +149,12 @@ LOCAL_JAVA_LIBRARIES := android.test.runner
 LOCAL_MODULE := sample
 # 将当前模块编译成一个静态的 Java 库
 include $(BUILD_STATIC_JAVA_LIBRARY)
+```
 FMRadio，编译jni动态库，并打包到apk中
-
 packages/apps/FMRadio/jni/fmr/Android.mk
+
 编译生成libfmjni.so
+```makefile
 LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 # 定义源代码文件
@@ -187,6 +200,7 @@ LOCAL_AAPT_FLAGS := --auto-add-overlay --extra-packages android.support.v7.cardv
 include $(BUILD_PACKAGE)
 # 引入当前路径下的所有makefile文件
 include $(call all-makefiles-under,$(LOCAL_PATH))
+```
 集成第三方软件(.jar，.so)
 
 本例中apk使用百度地图提供的jar和so库文件
@@ -194,6 +208,8 @@ include $(call all-makefiles-under,$(LOCAL_PATH))
 jar文件路径：packages/apps/MyMaps/libs/baidumapapi.jar
 so文件路径：packages/apps/MyMaps/libs/armeabi/libBMapApiEngine_v1_3_1.so
 Android.mk内容如下：
+
+```makefile
 LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 LOCAL_MODULE_TAGS := optional
@@ -221,6 +237,7 @@ include $(BUILD_MULTI_PREBUILT)
 ##################################################
 
 include $(callall-makefiles-under,$(LOCAL_PATH))
+```
 参考资料
 
 http://android.mk/
