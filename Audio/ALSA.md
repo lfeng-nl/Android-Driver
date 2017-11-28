@@ -93,6 +93,7 @@ struct snd_pcm {
 - `snd_pcm`是挂在`snd_card`下的一个 snd_device;
 - `snd_pcm`中字段：steram[2],指向两个`smd_pcm_str` 结构，分别代表`playback stream`和`capture stream`;
 - `snd_pcm_substream`是pcm的中间层的核心，绝大部分任务都是在substream中处理，
+<<<<<<< Updated upstream
 - pcm设备会在`snd_card`注册时，调用`snd_pcm_dev_register()`注册;
 
 ### 4.Control接口
@@ -537,6 +538,26 @@ static int snd_soc_register_dais(struct device *dev,
 - 注册widget
 
   一般，会根据音频硬件的组成，非别在声卡的codec驱动、platform驱动、和machine驱动中定义一组widget，这些widget用数组进行组织；例如codec中的注册：会将组织好的widget放到`codec_driver`中，当machine驱动匹配上该codec时，会检查codec_driver的相应位是否赋值，有则调用：`snd_soc_dapm_new_controls()`进行`create new dapm controls`；对于不能组织到数组中的widget可以在codec的probe中单独利用`snd_soc_dapm_new_controls()`进行`create new dapm controls`；创建好的`snd_soc_dapm_widget`加入`snd_soc_card->widgets`链表；
+=======
+- alsa已经为我们提供了新建pcm的api`snd_pcm_new()`;
+- pcm 的创建流程：
+```c
+snd_catd_cread();
+snd_pcm_new();
+	{
+		snd_pcm_new_stream(playback);
+		snd_pcm_new_stream(capture);
+		snd_device_new(SNDRV_DEV_PCM, &ops);
+	}
+snd_pcm_set_ops(&my_pcm_ops);
+snd_card_register();
+	{
+		snd_device_register_all();
+			{
+				snd_pcm_dev_register();
+			}
+	}
+```
 
 ## III TinyALSA
 ### 1.介绍 
