@@ -5,32 +5,22 @@
 ### a.编译步骤
 
 - 清理
-
   ```sh
   $ make clobber
   ```
-
-  ​
-
 - 初始化环境
-
   ```sh
   $ source ./build/envetup.sh
   # 这个命令是用来将envsetup.sh里的所有用到的命令加载到环境变量里去
   ```
-
 - 选择编译目标
-
   ```sh
   $ lunch aosp_arm-eng
   ```
-
 - 编译
-
   ```sh
   $ make -j16
   ```
-
   > 参数N表示并行编译的任务数，一般N为cpu线程数的1-2倍.例如，在一台双核 E5520 计算机（2 个 CPU，每个 CPU 4 个内核，每个内核 2 个线程）上，要实现最快的编译速度，可以使用介于 make -j16 到 make -j32 之间的命令
 
 ### b.编译结果及目录
@@ -97,14 +87,8 @@ makefile的相关语法请参考Makefile语法一文或其他书籍。
 ![Makefile文件](https://www.ibm.com/developerworks/cn/opensource/os-cn-android-build/image004.png)
 
 ####  比较重要的make文件介绍：
-
-devices/xxxxx/BoardConfig.mk，AndroidBoard.mk
-
-BoardConfig.mk旨在包含硬件特定的配置和生成标志。
-它应该定义可用于设备的低级硬件功能
-它应该定义如何打包最终的输出以及包含的内容（启动加载器，内核等）
-AndroidBoard.mk在HW板上配置Android平台
-定义在构建过程中生成并包含在Android平台构建中的文件
-定义各种Android分区的文件
-定义要为您的产品打包的一组应用程序
-可以定义需要成为产品构建部分的Android平台功能。
+- `devices/xxxxx/BoardConfig.mk`，`AndroidBoard.mk`
+  - `BoardConfig.mk`设备硬件配置及目标架构配置文件.
+  - `AndroidBoard.mk`设备属性和键值映射配置文件.
+  - `TARGET_KERNEL_CONFIG/KERNEL_DEFCONFIG`:定义默认kernelconfig文件；
+  - ​

@@ -14,8 +14,11 @@
 #define LOG_NIDEBUG 0		//打开ALOGI
 #define NDEBUG 0		    //打开全部LOG
 ```
+## 2.Android log查看
 
-## 2.printk 打印控制
+- `adb logcat + grep`：
+- 查看log文件，一般在`/data/local/log/logcat`; 
+## 3.printk 打印控制
 - 在头文件 <include/linux/kern_levls.h>中规定了预定的八种内核log级别
 ```c
 #define KERN_EMERG	KERN_SOH "0"	/* 用于紧急事件消息*/
@@ -30,7 +33,7 @@
 #define KERN_DEFAULT	KERN_SOH "d"	/* the default kernel loglevel */
 
 ```
-- 内核对打印级别的控制：`cat /proc/sys/kernel/printk/` 可以查看，默认值受一般为：
+- 内核对打印级别的控制：`cat /proc/sys/kernel/printk` 可以查看，默认值受一般为：
   > 7 4 1 7  
   > 依次为：  
   > 7：控制台日志级别，优先级高于该级别的（不包括），被打印至控制台，例如串口；  
@@ -55,7 +58,7 @@ int console_printk[4] = {
 };
 ```
 - dmesg:好像不受以上级别控制，都会打印；
-## 3.dev_dbg
+## 4.dev_dbg
 - dev_dbg：内核中我们常用`dev_dbg`来控制输出，这个函数实质是调用 `printk(KERN_DEBUG)`来打印输出； 
 - 使用方式：1.包含头文件`<linux/device.h>`或 `<linux/platform_device.h>`, 2.在包含该头文件之前，使用`#define DEBUG 1`来打开开关；
 - dev_dbg参数:第一个为`struct device *dev`类型,可以利用`dev->name`来检索log信息，第二个为需要打印的信息；
@@ -82,7 +85,7 @@ do {						     \
 
 #endif
 ```
-## 4.跟打印log相关的预定义宏和预定义标识符
+## 5.跟打印log相关的预定义宏和预定义标识符
 ```c
 /* 预定义宏 */
 __DATE__    //运行预处理的时间
@@ -92,3 +95,9 @@ __TIME__    //源文件的编译时间，格式为"hh: mm: ss"
 /* 预定义标识符 */
 __func__    //代表为 "函数名" 的字符串
 ```
+## 6.kernel log的查看
+- 串口终端：注意控制台日志级别，只有日志级别高于控制台级别时才能打印`/proc/sys/kernel/printk`；
+- dmesg命令：print or control the kernel ring buffer
+  - `dmesg -c`：clean 掉dmesg缓存信息；
+  - `dmesg -T`：当前时间的方式显示时间信息；
+  - `dmesg -d`：显示两条log时间间隔；
