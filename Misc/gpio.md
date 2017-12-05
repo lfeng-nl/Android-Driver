@@ -4,6 +4,7 @@
 - 申请某个gpio端口，`int gpio_request(unsigned gpio, const char *label)`；需要gpio号和名字
 - 标记gpio的使用方向，包括输入还是输出；`int gpio_direction_input(unsigned gpio); int gpio_direction_output(unsigned gpio, int value);`
 - 获得gpio引脚的值或设置gpio引脚的值：`int gpio_get_value(unsigned gpio); int gpio_set_value(unsigned gpio, int value);`
+> `gpio_direction_output` vs `gpio_set_value`: 前者置为输出同时更新端口值，后者仅仅改变端口值；
 - gpio当做中断使用：`int gpio_to_irq(unsigned gpio);`返回中断编号
 - 导出gpio端口到用户空间：`int gpio_export(unsigned gpio, bool direction_may_change)`;`direction_may_change`:表示是否允许用户程序修改gpio方向；
 ## 用户空间gpio的使用
