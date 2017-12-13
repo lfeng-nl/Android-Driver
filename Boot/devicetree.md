@@ -195,3 +195,25 @@ local-mac-address = [000012345678];
 };
 ```
 
+## 5.pinctrl相关
+
+定义引脚复用或配置参数（上下拉，三态，驱动强度等）及不同工况下的状态，例如：active,suspend；
+
+> 参考：`kernel/Documentation/devicetree/bindings/pinctrl/`下相关文档；
+
+### 1.相关属性
+
+- **compatible**：匹配名称；
+- **gpio-controller**：值为`<empty>`；表明该节点为gpio控制器；
+- **#gpio-cell**：值为`<u32>`，与`#address-cells`相似，表明gpio指示符cell个个数；具体每位代表含义，参考相关文档，例如高通：必须为2位，用于指定pin number和flags，
+
+### 2.子节点相关属性
+
+- **pins**：值为`<string-arrar>`；必须，受此子节点指定属性影响的gpio引脚列表。
+- **function**：值为<string>；必须，指定引脚功能。
+- **bias-disable**：值为<none>；可选，指定引脚必须配置为no pull.
+- **bias-pull-down：值为<none>；可选，指定引脚为下拉。
+- **bias-pull-up**：值为<none>；指定引脚为上拉。
+- **output-high**：值为<none>；引脚为输出模式，驱动为高电平。
+- **output-low**：值为<none>；引脚为输出模式，驱动为低电平。
+- **drive-strength**：值为<u32>；驱动强度，mA，值为：2,4,6,8,10,12,14,16.

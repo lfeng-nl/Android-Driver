@@ -1,5 +1,8 @@
 # 本文介绍GPIO subsystem相关知识
 ## 内核中gpio的使用
+
+一般先通过PIN MUX相关配置，配置引脚为gpio 模式，例如联芯平台：`comip_mfp_config(mfp_pin id, mfp_pin_mode mode);`
+
 - 测试gpio是否合法`bool gpio_is_valid(int gpio);`
 - 申请某个gpio端口，`int gpio_request(unsigned gpio, const char *label)`；需要gpio号和名字
 - 标记gpio的使用方向，包括输入还是输出；`int gpio_direction_input(unsigned gpio); int gpio_direction_output(unsigned gpio, int value);`
